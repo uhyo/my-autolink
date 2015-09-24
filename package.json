@@ -1,0 +1,22 @@
+{
+  "name": "my-autolinker",
+  "version": "0.0.1",
+  "description": "My customable autolinker for me.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/uhyo/my-autolinker"
+  },
+  "keywords": [
+    "autolink"
+  ],
+  "author": "uhyo",
+  "license": "MIT",
+  "devDependencies": {
+    "coffee-script": "^1.10.0",
+    "mocha": "^2.3.3"
+  }
+}
