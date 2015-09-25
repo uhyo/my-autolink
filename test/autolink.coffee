@@ -38,3 +38,6 @@ describe 'url linking',->
 describe 'multiples',->
     it 'urls',->
         assert.equal autolink("foo http://example.net http://subdomain.of.example.org/foo !!!"), "foo <a href='http://example.net'>http://example.net</a> <a href='http://subdomain.of.example.org/foo'>http://subdomain.of.example.org/foo</a> !!!"
+        assert.equal autolink("foo http://example.net http://subdomain.of.example.org/foo !!! https://some-domain.example.net/\"foobar\""), "foo <a href='http://example.net'>http://example.net</a> <a href='http://subdomain.of.example.org/foo'>http://subdomain.of.example.org/foo</a> !!! <a href='https://some-domain.example.net/&quot;foobar&quot;'>https://some-domain.example.net/&quot;foobar&quot;</a>"
+    it 'does not nest',->
+        assert.equal autolink("foo http://example.net/http://subdomain.of.example.org/foo !!!"), "foo <a href='http://example.net/http://subdomain.of.example.org/foo'>http://example.net/http://subdomain.of.example.org/foo</a> !!!"

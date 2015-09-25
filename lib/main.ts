@@ -66,7 +66,7 @@ export function autolink(text:string,transforms?:AutolinkTransforms,options?:Aut
                     //idxの先にマッチがあった（まだ使えるかも）
                     let j=0;
                     for(;j<matchings.length;j++){
-                        if(matchings[j].position <= o.index){
+                        if(matchings[j].position >= o.index){
                             break;
                         }
                     }
