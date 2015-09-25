@@ -12,7 +12,7 @@ export interface TransformResult{
 }
 
 export interface AutolinkOptions{
-    http?: {
+    url?: {
         requireSchemes?: boolean;
         schemes?: Array<string>|string;
     }

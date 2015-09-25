@@ -22,19 +22,19 @@ function urlRegExp(options:AutolinkOptions):RegExp{
     //utility
     /// non-space printables (does NOT include ASCII chars)
     const nonspaces="[\\u00a1-\\u167f\\u1681-\\u180d\\u180f-\\u1fff\\u200c-\\u202e\\u2030-\\u205e\\u2060-\\u2fff\\u3001-\\ufefe\\uff00-\\uffff]";
-    const http=options.http;
+    const url=options.url;
     //schemeのRegExp
-    let scheme:string, schemes = options.http.schemes;
-    if(!options.http.requireSchemes){
+    let scheme:string, schemes = url.schemes;
+    if(!url.requireSchemes){
         scheme="";
     }else if(Array.isArray(schemes)){
         //some protocolsがallowされている
         scheme="(?:" + schemes.join("|") + ")://";
-    }else if(options.http.schemes==="*"){
+    }else if(url.schemes==="*"){
         //any
         scheme="[a-z]+://";
     }else{
-        throw new Error("Unrecognized value for options.http.schemes");
+        throw new Error("Unrecognized value for options.url.schemes");
     }
 
     //auth RegExp
@@ -48,5 +48,5 @@ function urlRegExp(options:AutolinkOptions):RegExp{
     //path
     const path = "(?:(?:/\\S*)?)";
     
-    return new RegExp(scheme + auth + host + port + path,"i");
+    return new RegExp(scheme + auth + host + port + path,"ig");
 }

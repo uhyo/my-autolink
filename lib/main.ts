@@ -7,7 +7,8 @@ import * as builtins from './builtins';
 export function autolink(text:string,transforms?:AutolinkTransforms,options?:AutolinkOptions):string{
     options = extend(true, {}, defaultOptions, options);
     if(transforms==null){
-        transforms=[];
+        //default
+        transforms=["url"];
     }
     //built-in transforms
     for(let i=0,l=transforms.length;i<l;i++){
@@ -20,8 +21,9 @@ export function autolink(text:string,transforms?:AutolinkTransforms,options?:Aut
     //まず全てをmatchする
     for(let i=0,l=transforms.length;i<l;i++){
         let t=<CustomTransform>transforms[i], p=t.pattern(options);
-        p.lastIndex=0;
-        p.global=true;
+        if(p.global!==true){
+            throw new Error("Pattenrs must have its global flag set");
+        }
         let o=p.exec(text);
         if(o){
             //matchした
@@ -51,7 +53,7 @@ export function autolink(text:string,transforms?:AutolinkTransforms,options?:Aut
         const html="<a href='"+escapeHtml(tr.url)+"'>"+escapeHtml(tr.text || m.result[0])+"</a>";
         //前の部分とマッチ部分を入れる
         result+=escapeHtml(text.slice(idx, m.position))+html;
-        idx=m.position+m[0].length;
+        idx=m.position+m.result[0].length;
         //開始位置を通り過ぎたやつはもう使えないのでマッチし直す
         for(let i=0;i<matchings.length;i++){
             const m2=matchings[i];
@@ -91,7 +93,7 @@ export function autolink(text:string,transforms?:AutolinkTransforms,options?:Aut
 }
 
 var defaultOptions:AutolinkOptions = {
-    http: {
+    url: {
         requireSchemes: true,
         schemes: ["http", "https"]
     }
