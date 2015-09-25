@@ -71,8 +71,8 @@ export function autolink(text:string,transforms?:AutolinkTransforms,options?:Aut
                         }
                     }
                     matchings.splice(j,0,{
-                        transform: m.transform,
-                        pattern: m.pattern,
+                        transform: m2.transform,
+                        pattern: m2.pattern,
                         result: o,
                         position: o.index
                     });

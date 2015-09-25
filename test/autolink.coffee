@@ -76,4 +76,4 @@ describe 'custom autolink',->
     it 'url & custom 1',->
         assert.equal autolink("foo/123 https://custom-url.jp/foo/number/1234/5 number/678",["url"].concat(transforms)), "foo/123 <a href='https://custom-url.jp/foo/number/1234/5'>https://custom-url.jp/foo/number/1234/5</a> <a href='/path/to/678'>number/678</a>"
     it 'url & custom 2',->
-        assert.equal autolink("foo/123 https://custom-url.jp/foo/number/1234/5 number/678",[transforms].concat(["url"])), "foo/123 <a href='https://custom-url.jp/foo/number/1234/5'>https://custom-url.jp/foo/number/1234/5</a> <a href='/path/to/678'>number/678</a>"
+        assert.equal autolink("foo/123 https://custom-url.jp/foo/number/1234/5 number/678",transforms.concat(["url"])), "foo/123 <a href='https://custom-url.jp/foo/number/1234/5'>https://custom-url.jp/foo/number/1234/5</a> <a href='/path/to/678'>number/678</a>"
