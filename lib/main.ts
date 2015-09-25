@@ -4,7 +4,18 @@ import escapeHtml=require('escape-html');
 import {AutolinkTransforms, CustomTransform, AutolinkOptions} from './interfaces';
 import * as builtins from './builtins';
 
-export function autolink(text:string,transforms?:AutolinkTransforms,options?:AutolinkOptions):string{
+export function autolink(text:string,transforms:AutolinkTransforms,options?:AutolinkOptions):string;
+export function autolink(text:string,options?:AutolinkOptions):string;
+export function autolink(text:string, arg1?:any, arg2?:any):string{
+    var transforms:AutolinkTransforms, options:AutolinkOptions;
+    if(Array.isArray(arg1)){
+        transforms = arg1;
+        options = arg2;
+    }else{
+        transforms = null;
+        options = arg1;
+    }
+
     options = extend(true, {}, defaultOptions, options);
     if(transforms==null){
         //default
