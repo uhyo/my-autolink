@@ -42,7 +42,7 @@ function urlRegExp(options:AutolinkOptions):RegExp{
     //hostname
     const hostpart = "(?:(?:(?:[0-9a-z]|"+nonspaces+")-*)*(?:[0-9a-z]|"+nonspaces+")+)";
     const hostname = "(?:"+hostpart+"(?:\\."+hostpart+")+\\.?)";
-    const host = "(?:localhost|"+ipRegex.v4().source+"|"+hostname+")";
+    const host = "(?:localhost|"+ipRegex.v4().source+"|\\["+ipRegex.v6().source+"\\]|"+hostname+")";
     //port
     const port = "(?:(?::\\d{1,5})?)";
     //path
