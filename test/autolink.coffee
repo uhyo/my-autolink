@@ -34,6 +34,11 @@ describe 'url linking',->
     describe 'ports',->
         it 'port',->
             assert.equal autolink("foo http://example.net:8080/bar 3"), "foo <a href='http://example.net:8080/bar'>http://example.net:8080/bar</a> 3"
+    describe 'no schemes',->
+        it 'not accepted by default',->
+            assert.equal autolink("I went to google.com yesterday."), "I went to google.com yesterday."
+        it 'accepted by unsetting requireSchemes flag',->
+            assert.equal autolink("I went to google.com yesterday.",{url:{requireSchemes:false}}), "I went to <a href='http://google.com'>google.com</a> yesterday."
 
 describe 'multiples',->
     it 'urls',->

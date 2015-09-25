@@ -8,9 +8,13 @@ export var url:CustomTransform = {
     pattern: (options:AutolinkOptions)=>{
         return urlRegExp(options);
     },
-    transform: (options:AutolinkOptions,...result:Array<string>)=>{
+    transform: (options:AutolinkOptions,text:string,scheme:string)=>{
+        let url:string = text;
+        if(scheme===""){
+            url="http://"+url;
+        }
         return {
-            url: result[0]
+            url: url
         };
     },
 };
@@ -36,6 +40,7 @@ function urlRegExp(options:AutolinkOptions):RegExp{
     }else{
         throw new Error("Unrecognized value for options.url.schemes");
     }
+    scheme="("+scheme+")";
 
     //auth RegExp
     const auth = "(?:\\S+(?::\\S*)?@)?";
