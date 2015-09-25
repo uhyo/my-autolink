@@ -62,6 +62,15 @@ describe 'custom autolink',->
                 }
         }
     ]
+    transforms3= [
+        {
+            pattern: -> /https?/g
+            transform: (_,text)->
+                return {
+                    url: "http://example.net/#{text}"
+                }
+        }
+    ]
     it 'custom',->
         assert.equal autolink("foo/123 number/1234number/555aiu",transforms), "foo/123 <a href='/path/to/1234'>number/1234</a><a href='/path/to/555'>number/555</a>aiu"
     it 'custom html escape',->
@@ -77,3 +86,8 @@ describe 'custom autolink',->
         assert.equal autolink("foo/123 https://custom-url.jp/foo/number/1234/5 number/678",["url"].concat(transforms)), "foo/123 <a href='https://custom-url.jp/foo/number/1234/5'>https://custom-url.jp/foo/number/1234/5</a> <a href='/path/to/678'>number/678</a>"
     it 'url & custom 2',->
         assert.equal autolink("foo/123 https://custom-url.jp/foo/number/1234/5 number/678",transforms.concat(["url"])), "foo/123 <a href='https://custom-url.jp/foo/number/1234/5'>https://custom-url.jp/foo/number/1234/5</a> <a href='/path/to/678'>number/678</a>"
+
+    it 'same-index conflict (first) 1',->
+        assert.equal autolink("http://localhost/3",["url"].concat(transforms3)), "<a href='http://localhost/3'>http://localhost/3</a>"
+    it 'same-index conflict (first) 2',->
+        assert.equal autolink("http://localhost/3",transforms3.concat(["url"])), "<a href='http://example.net/http'>http</a>://localhost/3"
