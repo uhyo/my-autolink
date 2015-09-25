@@ -1,10 +1,10 @@
-///<reference path="./externals.d.ts" />
+///<reference path="./d/externals.d.ts" />
 import extend=require('extend');
 import escapeHtml=require('escape-html');
 import {AutolinkTransforms, CustomTransform, AutolinkOptions} from './interfaces';
 import * as builtins from './builtins';
 
-function autolink(text:string,transforms?:AutolinkTransforms,options?:AutolinkOptions):string{
+export function autolink(text:string,transforms?:AutolinkTransforms,options?:AutolinkOptions):string{
     options = extend(true, {}, defaultOptions, options);
     if(transforms==null){
         transforms=[];

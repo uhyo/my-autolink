@@ -1,4 +1,4 @@
-///<reference path="./externals.d.ts" />
+///<reference path="./d/externals.d.ts" />
 import ipRegex=require('ip-regex');
 import {AutolinkOptions, CustomTransform} from './interfaces';
 //built-in transforms

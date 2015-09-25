@@ -2,6 +2,12 @@
     "compilerOptions":{
         "module":"commonjs",
         "target":"es5"
-    }
+    },
+    "files":[
+        "index.ts",
+        "lib/main.ts",
+        "lib/builtins.ts",
+        "lib/interfaces.ts"
+    ]
 }
 

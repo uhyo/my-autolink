@@ -1,5 +1,7 @@
 node_modules/
 lib/*.js
+lib/*.d.ts
+./index.js
 ./index.d.ts
 
 *.swp

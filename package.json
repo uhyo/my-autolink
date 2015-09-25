@@ -4,9 +4,9 @@
   "description": "My customable autolinker for me.",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha --compilers coffee:coffee-script/register",
-    "build": "tsc",
-    "clean": "rm ./lib/*.js"
+    "test": "mocha --compilers coffee:coffee-script/register",
+    "build": "tsc -d",
+    "clean": "rm ./index.js ./lib/*.js ./index.d.ts ./lib/*.d.ts"
   },
   "repository": {
     "type": "git",
