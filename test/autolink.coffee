@@ -15,7 +15,7 @@ describe 'url linking',->
         it 'hostname',->
             assert.equal autolink("foo http://example.net bar"), "foo <a href='http://example.net'>http://example.net</a> bar"
         it 'peroid-terminated fqdn',->
-            assert.equal autolink("foohttps://example.com. 3"), "foo<a href='https://example.com.'>https://example.com.</a> 3"
+            assert.equal autolink("foohttps://example.com. 3",["url"]), "foo<a href='https://example.com.'>https://example.com.</a> 3"
         it 'do not link single-parted name',->
             assert.equal autolink("foo http://invalid あいう"), "foo http://invalid あいう"
         it 'but localhost is valid',->
@@ -41,3 +41,34 @@ describe 'multiples',->
         assert.equal autolink("foo http://example.net http://subdomain.of.example.org/foo !!! https://some-domain.example.net/\"foobar\""), "foo <a href='http://example.net'>http://example.net</a> <a href='http://subdomain.of.example.org/foo'>http://subdomain.of.example.org/foo</a> !!! <a href='https://some-domain.example.net/&quot;foobar&quot;'>https://some-domain.example.net/&quot;foobar&quot;</a>"
     it 'does not nest',->
         assert.equal autolink("foo http://example.net/http://subdomain.of.example.org/foo !!!"), "foo <a href='http://example.net/http://subdomain.of.example.org/foo'>http://example.net/http://subdomain.of.example.org/foo</a> !!!"
+
+
+describe 'custom autolink',->
+    transforms= [
+        {
+            pattern: -> /number\/(\d+)/g
+            transform: (_,text,num)->
+                return {
+                    url: "/path/to/#{num}"
+                }
+        }
+    ]
+    transforms2= [
+        {
+            pattern: -> /number\/(\d+)/g
+            transform: (_,text,num)->
+                return {
+                    url: "/<malicious url=\"foo\">/#{num}"
+                }
+        }
+    ]
+    it 'custom',->
+        assert.equal autolink("foo/123 number/1234number/555aiu",transforms), "foo/123 <a href='/path/to/1234'>number/1234</a><a href='/path/to/555'>number/555</a>aiu"
+    it 'custom html escape',->
+        assert.equal autolink("foo\">number/123<a>",transforms), "foo&quot;&gt;<a href='/path/to/123'>number/123</a>&lt;a&gt;"
+        assert.equal autolink("foo\">number/123<a>",transforms2), "foo&quot;&gt;<a href='/&lt;malicious url=&quot;foo&quot;&gt;/123'>number/123</a>&lt;a&gt;"
+
+    it 'custom & url 1',->
+        assert.equal autolink("foo/123 number/1234https://custom-url.jp/foo/number/1234/5 678",["url"].concat(transforms)), "foo/123 <a href='/path/to/1234'>number/1234</a><a href='https://custom-url.jp/foo/number/1234/5'>https://custom-url.jp/foo/number/1234/5</a> 678"
+    it 'custom & url 2',->
+        assert.equal autolink("foo/456 number/1234https://custom-url.jp/foo/number/1234/5 678",transforms.concat(["url"])), "foo/456 <a href='/path/to/1234'>number/1234</a><a href='https://custom-url.jp/foo/number/1234/5'>https://custom-url.jp/foo/number/1234/5</a> 678"

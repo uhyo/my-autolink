@@ -29,7 +29,7 @@ export function autolink(text:string,transforms?:AutolinkTransforms,options?:Aut
             //matchした
             let j=0;
             for(;j<matchings.length;j++){
-                if(o.index >= matchings[j].position){
+                if(o.index <= matchings[j].position){
                     break;
                 }
             }
