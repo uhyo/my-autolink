@@ -14,7 +14,7 @@ export var url:CustomTransform = {
             url="http://"+url;
         }
         return {
-            url: url
+            href: url
         };
     },
 };

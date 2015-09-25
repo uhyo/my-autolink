@@ -3,12 +3,7 @@
 export type AutolinkTransforms = Array<string|CustomTransform>;
 export interface CustomTransform{
     pattern(options:AutolinkOptions):RegExp;
-    transform(options:AutolinkOptions,...args:Array<string>):TransformResult;
-}
-
-export interface TransformResult{
-    url: string;
-    text?: string;
+    transform(options:AutolinkOptions,...args:Array<string>):any;
 }
 
 export interface AutolinkOptions{

@@ -61,7 +61,7 @@ export function autolink(text:string, arg1?:any, arg2?:any):string{
             throw new Error("Matching with the empty string is not allowed");
         }
         //HTMLを生成
-        const html="<a href='"+escapeHtml(tr.url)+"'>"+escapeHtml(tr.text || m.result[0])+"</a>";
+        const html=generateA(tr, m.result[0]);
         //前の部分とマッチ部分を入れる
         result+=escapeHtml(text.slice(idx, m.position))+html;
         idx=m.position+m.result[0].length;
@@ -115,4 +115,16 @@ interface Matching{
     pattern: RegExp;
     result: Array<string>;
     position: number;
+}
+
+function generateA(obj:any,defaultText:string):string{
+    let result="<a";
+    for(let key in obj){
+        //属性
+        if(obj[key]!=null){
+            result+=" "+escapeHtml(key)+"='"+escapeHtml(obj[key])+"'";
+        }
+    }
+    result+=">"+escapeHtml(obj.text || defaultText)+"</a>";
+    return result;
 }

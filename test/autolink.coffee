@@ -54,7 +54,8 @@ describe 'custom autolink',->
             pattern: -> /number\/(\d+)/g
             transform: (_,text,num)->
                 return {
-                    url: "/path/to/#{num}"
+                    href: "/path/to/#{num}",
+                    target: if num=="123" then "_blank" else null
                 }
         }
     ]
@@ -63,7 +64,7 @@ describe 'custom autolink',->
             pattern: -> /number\/(\d+)/g
             transform: (_,text,num)->
                 return {
-                    url: "/<malicious url=\"foo\">/#{num}"
+                    href: "/<malicious url=\"foo\">/#{num}"
                 }
         }
     ]
@@ -72,14 +73,16 @@ describe 'custom autolink',->
             pattern: -> /https?/g
             transform: (_,text)->
                 return {
-                    url: "http://example.net/#{text}"
+                    href: "http://example.net/#{text}"
                 }
         }
     ]
     it 'custom',->
         assert.equal autolink("foo/123 number/1234number/555aiu",transforms), "foo/123 <a href='/path/to/1234'>number/1234</a><a href='/path/to/555'>number/555</a>aiu"
+    it 'other attributes',->
+        assert.equal autolink("foo/123 number/123number/555aiu",transforms), "foo/123 <a href='/path/to/123' target='_blank'>number/123</a><a href='/path/to/555'>number/555</a>aiu"
     it 'custom html escape',->
-        assert.equal autolink("foo\">number/123<a>",transforms), "foo&quot;&gt;<a href='/path/to/123'>number/123</a>&lt;a&gt;"
+        assert.equal autolink("foo\">number/123<a>",transforms), "foo&quot;&gt;<a href='/path/to/123' target='_blank'>number/123</a>&lt;a&gt;"
         assert.equal autolink("foo\">number/123<a>",transforms2), "foo&quot;&gt;<a href='/&lt;malicious url=&quot;foo&quot;&gt;/123'>number/123</a>&lt;a&gt;"
 
     it 'custom & url 1',->
