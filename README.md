@@ -7,7 +7,7 @@
 npm install my-autolink
 ```
 
-Note that this package requires [https://github.com/Microsoft/TypeScript](typescript) globally installed when you install this package in production mode.
+Note that this package requires [typescript](https://github.com/Microsoft/TypeScript) globally installed when you install this package in production mode.
 
 # TypeScript support
 TypeScript declaration file (`.d.ts`) is provided. TypeScript >=1.6.0 will automatically find typing information for this module.
@@ -20,7 +20,7 @@ console.log(autolink("Go to http://example.net/ now!"))
 // -> "Go to <a href='http://example.net/'>http://example.net/</a> now!"
 ```
 
-The result is escaped by [https://github.com/component/escape-html](escape-html).
+The result is escaped by [escape-html](https://github.com/component/escape-html).
 
 # API
 ## autolink(text[, transforms] [,options])
@@ -30,7 +30,7 @@ Returns `text` with `a` tags added.
 * **transforms**: an array of a string or a Transform Object explained below. Defaults to `["url"]`, where `"url"` means the built-in transform that turns a url into a link
 * **options**: options passed to built-in transforms.
     * **url**: passed to `"url"` transform.
-        * **requireSchemes**: If set to false, urls that start with hostname is converted to link. (example: `example.net/foo/bar` to `<a href='http://example.net/foo/bar`>example.net/foo/bar</a>`) Defaults to true.
+        * **requireSchemes**: If set to false, urls that start with hostname is converted to link. (example: `example.net/foo/bar` to `<a href='http://example.net/foo/bar'>example.net/foo/bar</a>`) Defaults to true.
         * **schemes**: Array of schemes allowed. Default value is `["http","https"]`. Set to the string `"*"` to accept any scheme.
 
 # Transform Object
