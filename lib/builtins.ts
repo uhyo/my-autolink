@@ -1,5 +1,6 @@
 ///<reference path="./d/externals.d.ts" />
 import ipRegex=require('ip-regex');
+import extend=require('extend');
 import {AutolinkOptions, CustomTransform} from './interfaces';
 //built-in transforms
 
@@ -13,9 +14,9 @@ export var url:CustomTransform = {
         if(scheme===""){
             url="http://"+url;
         }
-        return {
+        return extend(options.url.attributes,{
             href: url
-        };
+        });
     },
 };
 

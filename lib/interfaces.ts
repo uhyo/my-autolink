@@ -10,5 +10,6 @@ export interface AutolinkOptions{
     url?: {
         requireSchemes?: boolean;
         schemes?: Array<string>|string;
+        attributes?: any;
     }
 }

@@ -106,7 +106,8 @@ export function autolink(text:string, arg1?:any, arg2?:any):string{
 var defaultOptions:AutolinkOptions = {
     url: {
         requireSchemes: true,
-        schemes: ["http", "https"]
+        schemes: ["http", "https"],
+        attributes: {}
     }
 };
 

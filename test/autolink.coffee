@@ -39,6 +39,13 @@ describe 'url linking',->
             assert.equal autolink("I went to google.com yesterday."), "I went to google.com yesterday."
         it 'accepted by unsetting requireSchemes flag',->
             assert.equal autolink("I went to google.com yesterday.",{url:{requireSchemes:false}}), "I went to <a href='http://google.com'>google.com</a> yesterday."
+    describe 'other attributes',->
+        it 'add attributes',->
+            assert.equal autolink("I went to https://google.com/ yesterday.",{
+                url:
+                    attributes:
+                        target: '_blank'
+            }), "I went to <a target='_blank' href='https://google.com/'>https://google.com/</a> yesterday."
 
 describe 'multiples',->
     it 'urls',->
