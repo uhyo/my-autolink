@@ -1,4 +1,4 @@
-# my-autolink v0.0.1
+# my-autolink v0.0.2
 
 `my-autolink` is my autolinker for me.
 
@@ -6,8 +6,6 @@
 ```sh
 npm install my-autolink
 ```
-
-Note that this package requires [typescript](https://github.com/Microsoft/TypeScript) globally installed when you install this package in production mode.
 
 # TypeScript support
 TypeScript declaration file (`.d.ts`) is provided. TypeScript >=1.6.0 will automatically find typing information for this module.
@@ -32,6 +30,7 @@ Returns `text` with `a` tags added.
     * **url**: passed to `"url"` transform.
         * **requireSchemes**: If set to false, urls that start with hostname is converted to link. (example: `example.net/foo/bar` to `<a href='http://example.net/foo/bar'>example.net/foo/bar</a>`) Defaults to true.
         * **schemes**: Array of schemes allowed. Default value is `["http","https"]`. Set to the string `"*"` to accept any scheme.
+        * **attributes**: Object specifying the attributes of generated `a` elements.
 
 # Transform Object
 Custom autolinks can be defined by Transform Object, which consist of two methods:
