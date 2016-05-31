@@ -1,6 +1,6 @@
 {
   "name": "my-autolink",
-  "version": "0.0.2-rc2",
+  "version": "0.0.2",
   "description": "My customable autolinker for me.",
   "main": "index.js",
   "typings": "index.d.ts",

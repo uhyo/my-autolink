@@ -55,5 +55,9 @@ The simplest example:
 
 This Transform Object converts the text `article/1234` into `<a href='/path/to/article/1234'>article/1234</a>`.
 
+# Changelog
+
+- **0.0.2**: Add `attributes` option to `url` transform.
+- **0.0.1**
 # License
 MIT
