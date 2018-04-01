@@ -132,7 +132,7 @@ function generateA(obj: any, defaultText: string): string {
   let result = '<a';
   for (let key in obj) {
     //属性
-    if (obj[key] != null) {
+    if (key !== 'text' && obj[key] != null) {
       result += ' ' + escapeHtml(key) + "='" + escapeHtml(obj[key]) + "'";
     }
   }

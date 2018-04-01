@@ -4,7 +4,7 @@ import { AutolinkOptions, CustomTransform } from './interfaces';
 //built-in transforms
 
 //url transform
-export var url: CustomTransform = {
+export const url: CustomTransform = {
   pattern: (options: AutolinkOptions) => {
     return urlRegExp(options);
   },
@@ -12,6 +12,12 @@ export var url: CustomTransform = {
     let url: string = text;
     if (scheme === '') {
       url = 'http://' + url;
+    }
+    if (options.url.text != null) {
+      return extend(options.url.attributes, {
+        href: url,
+        text: options.url.text(url),
+      });
     }
     return extend(options.url.attributes, {
       href: url,

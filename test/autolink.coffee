@@ -46,6 +46,12 @@ describe 'url linking',->
                     attributes:
                         target: '_blank'
             }), "I went to <a target='_blank' href='https://google.com/'>https://google.com/</a> yesterday."
+    describe 'url text option',->
+        it 'use return value of text()',->
+            assert.equal autolink("I went to https://google.com/ yesterday.",{
+                url:
+                    text: (url)-> url.replace(/^https?:\/\//, "")
+            }), "I went to <a href='https://google.com/'>google.com/</a> yesterday."
 
 describe 'multiples',->
     it 'urls',->
