@@ -1,6 +1,6 @@
 # autolink test
 assert = require 'assert'
-autolink = require '../'
+autolink = require('../').autolink
 
 describe 'html escape',->
     it 'escape &',->

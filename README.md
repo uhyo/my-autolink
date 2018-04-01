@@ -1,4 +1,4 @@
-# my-autolink v0.0.2
+# my-autolink v0.0.3
 
 `my-autolink` is my autolinker for me.
 
@@ -8,11 +8,11 @@ npm install my-autolink
 ```
 
 # TypeScript support
-TypeScript declaration file (`.d.ts`) is provided. TypeScript >=1.6.0 will automatically find typing information for this module.
+TypeScript declaration file (`.d.ts`) is provided. TypeScript will automatically find typing information for this module.
 
 # Sample
 ```js
-var autolink = require('my-autolink');
+var autolink = require('my-autolink').autolink;
 
 console.log(autolink("Go to http://example.net/ now!"))
 // -> "Go to <a href='http://example.net/'>http://example.net/</a> now!"
@@ -57,7 +57,9 @@ This Transform Object converts the text `article/1234` into `<a href='/path/to/a
 
 # Changelog
 
+- **0.0.3**: Update dependencies. Reform internal structure.
 - **0.0.2**: Add `attributes` option to `url` transform.
 - **0.0.1**
+
 # License
 MIT
