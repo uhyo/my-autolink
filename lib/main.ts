@@ -1,9 +1,9 @@
-import * as extend from 'extend';
 import escapeHtml = require('escape-html');
 import {
   AutolinkTransforms,
   CustomTransform,
   AutolinkOptions,
+  FilledAutolinkOptions,
 } from './interfaces';
 import * as builtins from './builtins';
 
@@ -14,24 +14,31 @@ export function autolink(
 ): string;
 export function autolink(text: string, options?: AutolinkOptions): string;
 export function autolink(text: string, arg1?: any, arg2?: any): string {
-  var transforms: AutolinkTransforms, options: AutolinkOptions;
+  let transforms: AutolinkTransforms | undefined;
+  let options: AutolinkOptions | undefined;
   if (Array.isArray(arg1)) {
     transforms = arg1;
     options = arg2;
   } else {
-    transforms = null;
+    transforms = undefined;
     options = arg1;
   }
 
-  options = extend(true, {}, defaultOptions, options);
+  const filledOptions = {
+    url: {
+      ... defaultOptions.url,
+      ... (options ? options.url : {}),
+    }
+  };
   if (transforms == null) {
     //default
     transforms = ['url'];
   }
   //built-in transforms
   for (let i = 0, l = transforms.length; i < l; i++) {
-    if ('string' === typeof transforms[i]) {
-      transforms[i] = builtins[<string>transforms[i]];
+    const t = transforms[i];
+    if ('string' === typeof t) {
+      transforms[i] = builtins[t];
     }
   }
 
@@ -39,7 +46,7 @@ export function autolink(text: string, arg1?: any, arg2?: any): string {
   //まず全てをmatchする
   for (let i = 0, l = transforms.length; i < l; i++) {
     let t = <CustomTransform>transforms[i],
-      p = t.pattern(options);
+      p = t.pattern(filledOptions);
     if (p.global !== true) {
       throw new Error('Pattenrs must have its global flag set');
     }
@@ -66,7 +73,7 @@ export function autolink(text: string, arg1?: any, arg2?: any): string {
   //matchをreplaceして解消していく
   while (matchings.length > 0) {
     const m = matchings[0],
-      tr = m.transform.transform(options, ...m.result);
+      tr = m.transform.transform(filledOptions, ...m.result);
     if (m.result[0] === '') {
       throw new Error('Matching with the empty string is not allowed');
     }
@@ -113,7 +120,7 @@ export function autolink(text: string, arg1?: any, arg2?: any): string {
   return result;
 }
 
-var defaultOptions: AutolinkOptions = {
+const defaultOptions: FilledAutolinkOptions = {
   url: {
     requireSchemes: true,
     schemes: ['http', 'https'],

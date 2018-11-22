@@ -1,32 +1,33 @@
 import ipRegex = require('ip-regex');
-import extend = require('extend');
-import { AutolinkOptions, CustomTransform } from './interfaces';
+import { CustomTransform, FilledAutolinkOptions } from './interfaces';
 //built-in transforms
 
 //url transform
 export const url: CustomTransform = {
-  pattern: (options: AutolinkOptions) => {
+  pattern: (options: FilledAutolinkOptions) => {
     return urlRegExp(options);
   },
-  transform: (options: AutolinkOptions, text: string, scheme: string) => {
+  transform: (options: FilledAutolinkOptions, text: string, scheme: string) => {
     let url: string = text;
     if (scheme === '') {
       url = 'http://' + url;
     }
     if (options.url.text != null) {
-      return extend(options.url.attributes, {
+      return {
+        ... options.url.attributes,
         href: url,
         text: options.url.text(url),
-      });
+      };
     }
-    return extend(options.url.attributes, {
+    return {
+      ... options.url.attributes, 
       href: url,
-    });
+    };
   },
 };
 
 //generate url regexp
-function urlRegExp(options: AutolinkOptions): RegExp {
+function urlRegExp(options: FilledAutolinkOptions): RegExp {
   //utility
   /// non-space printables (does NOT include ASCII chars)
   const nonspaces =

@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "strict": true,
     "target": "es5",
-    "outDir": "dist/"
+    "outDir": "dist/",
+    "declaration": true
   },
   "include": ["lib/**/*.ts"],
   "files": ["lib/index.ts"]
