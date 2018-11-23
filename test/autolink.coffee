@@ -1,6 +1,7 @@
 # autolink test
 assert = require 'assert'
 autolink = require('../').autolink
+compile = require('../').compile
 
 describe 'html escape',->
     it 'escape &',->
@@ -112,3 +113,79 @@ describe 'custom autolink',->
         assert.equal autolink("http://localhost/3",["url"].concat(transforms3)), "<a href='http://localhost/3'>http://localhost/3</a>"
     it 'same-index conflict (first) 2',->
         assert.equal autolink("http://localhost/3",transforms3.concat(["url"])), "<a href='http://example.net/http'>http</a>://localhost/3"
+
+describe 'compiled option',->
+    transforms= [
+        {
+            pattern: -> /number\/(\d+)/g
+            transform: (_,text,num)->
+                return {
+                    href: "/path/to/#{num}",
+                    target: if num=="123" then "_blank" else null
+                }
+        }
+    ]
+    it 'compiled transform',->
+        compiled = compile transforms
+        assert.equal(
+            autolink("foo/123 number/1234number/555aiu", compiled),
+            "foo/123 <a href='/path/to/1234'>number/1234</a><a href='/path/to/555'>number/555</a>aiu"
+        )
+    it 'multiple use of compiled transform',->
+        compiled = compile transforms
+        assert.equal(
+            autolink("foo/123 number/1234number/555aiu", compiled),
+            "foo/123 <a href='/path/to/1234'>number/1234</a><a href='/path/to/555'>number/555</a>aiu"
+        )
+        assert.equal(
+            autolink("number/987 123/456", compiled),
+            "<a href='/path/to/987'>number/987</a> 123/456"
+        )
+    it 'pattern function is called only once',->
+        called = 0
+        compiled = compile [
+            {
+                pattern: ->
+                    called++
+                    return /number\/(\d+)/g
+                transform: (_,text,num)->
+                    return {
+                        href: "/path/to/#{num}",
+                        target: if num=="123" then "_blank" else null
+                    }
+            }
+        ]
+        assert.equal(
+            autolink("foo/123 number/1234number/555aiu", compiled),
+            "foo/123 <a href='/path/to/1234'>number/1234</a><a href='/path/to/555'>number/555</a>aiu"
+        )
+        assert.equal(
+            autolink("number/987 123/456", compiled),
+            "<a href='/path/to/987'>number/987</a> 123/456"
+        )
+        assert.equal called, 1
+    it 'compile with options',->
+        compiled = compile ['url'], {
+            url:
+                attributes:
+                    target: '_blank'
+        }
+        assert.equal(
+            autolink("I went to https://google.com/ yesterday.",compiled),
+            "I went to <a target='_blank' href='https://google.com/'>https://google.com/</a> yesterday."
+        )
+    it 'compile with options (multiple)',->
+        compiled = compile ['url'], {
+            url:
+                attributes:
+                    target: '_blank'
+        }
+        assert.equal(
+            autolink("I went to https://google.com/ yesterday.",compiled),
+            "I went to <a target='_blank' href='https://google.com/'>https://google.com/</a> yesterday."
+        )
+        assert.equal(
+            autolink("foo http://example.net http://subdomain.of.example.org/foo !!!", compiled),
+            "foo <a target='_blank' href='http://example.net'>http://example.net</a> <a target='_blank' href='http://subdomain.of.example.org/foo'>http://subdomain.of.example.org/foo</a> !!!"
+        )
+
