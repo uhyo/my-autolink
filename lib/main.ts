@@ -1,9 +1,11 @@
 import escapeHtml = require('escape-html');
+import { AutolinkTransforms, AutolinkOptions } from './interfaces';
 import {
-  AutolinkTransforms,
-  AutolinkOptions,
-} from './interfaces';
-import { compile, CompiledTransform } from './compile';
+  compile,
+  CompiledTransform,
+  CompiledAutolinkSettings,
+  isCompiledOptions,
+} from './compile';
 
 export function autolink(
   text: string,
@@ -11,18 +13,20 @@ export function autolink(
   options?: AutolinkOptions,
 ): string;
 export function autolink(text: string, options?: AutolinkOptions): string;
-export function autolink(text: string, arg1?: any, arg2?: any): string {
-  let transforms: AutolinkTransforms | undefined;
-  let options: AutolinkOptions | undefined;
-  if (Array.isArray(arg1)) {
-    transforms = arg1;
-    options = arg2;
-  } else {
-    transforms = undefined;
-    options = arg1;
-  }
-
-  const compiled = compile(transforms, options);
+export function autolink(
+  text: string,
+  options?: CompiledAutolinkSettings,
+): string;
+export function autolink(
+  text: string,
+  arg1?: AutolinkTransforms | AutolinkOptions | CompiledAutolinkSettings,
+  arg2?: AutolinkOptions,
+): string {
+  const compiled = isCompiledOptions(arg1)
+    ? arg1
+    : Array.isArray(arg1)
+    ? compile(arg1, arg2)
+    : compile(undefined, arg1);
 
   const matchings: Array<Matching> = [];
   //まず全てをmatchする
