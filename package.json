@@ -10,6 +10,9 @@
     "build": "tsc",
     "clean": "rm -r ./dist"
   },
+  "lint-staged": {
+    "*.ts": "prettier --write"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/uhyo/my-autolink"
@@ -22,8 +25,11 @@
   "devDependencies": {
     "@types/escape-html": "0.0.20",
     "coffee-script": "^1.10.0",
+    "husky": "^1.2.0",
     "in-publish": "^2.0.0",
+    "lint-staged": "^8.1.0",
     "mocha": "^5.2.0",
+    "prettier": "^1.15.2",
     "typescript": "^3.1.6"
   },
   "dependencies": {
