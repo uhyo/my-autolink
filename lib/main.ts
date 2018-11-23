@@ -1,11 +1,14 @@
 import escapeHtml = require('escape-html');
 import {
   AutolinkTransforms,
-  CustomTransform,
   AutolinkOptions,
-  FilledAutolinkOptions,
 } from './interfaces';
-import * as builtins from './builtins';
+import { compile, CompiledTransform } from './compile';
+
+/**
+ * Cache of regexp object.
+ */
+const patternCache = new WeakMap<object, RegExp>();
 
 export function autolink(
   text: string,
@@ -24,33 +27,16 @@ export function autolink(text: string, arg1?: any, arg2?: any): string {
     options = arg1;
   }
 
-  const filledOptions = {
-    url: {
-      ... defaultOptions.url,
-      ... (options ? options.url : {}),
-    }
-  };
-  if (transforms == null) {
-    //default
-    transforms = ['url'];
-  }
-  //built-in transforms
-  for (let i = 0, l = transforms.length; i < l; i++) {
-    const t = transforms[i];
-    if ('string' === typeof t) {
-      transforms[i] = builtins[t];
-    }
-  }
+  const compiled = compile(transforms, options);
 
   const matchings: Array<Matching> = [];
   //まず全てをmatchする
-  for (let i = 0, l = transforms.length; i < l; i++) {
-    let t = <CustomTransform>transforms[i],
-      p = t.pattern(filledOptions);
-    if (p.global !== true) {
+  for (const t of compiled.transforms) {
+    const { pattern } = t;
+    if (pattern.global !== true) {
       throw new Error('Pattenrs must have its global flag set');
     }
-    let o = p.exec(text);
+    const o = pattern.exec(text);
     if (o) {
       //matchした
       let j = 0;
@@ -61,7 +47,7 @@ export function autolink(text: string, arg1?: any, arg2?: any): string {
       }
       matchings.splice(j, 0, {
         transform: t,
-        pattern: p,
+        pattern,
         result: o,
         position: o.index,
       });
@@ -73,7 +59,7 @@ export function autolink(text: string, arg1?: any, arg2?: any): string {
   //matchをreplaceして解消していく
   while (matchings.length > 0) {
     const m = matchings[0],
-      tr = m.transform.transform(filledOptions, ...m.result);
+      tr = m.transform.transform(compiled.options, ...m.result);
     if (m.result[0] === '') {
       throw new Error('Matching with the empty string is not allowed');
     }
@@ -120,16 +106,8 @@ export function autolink(text: string, arg1?: any, arg2?: any): string {
   return result;
 }
 
-const defaultOptions: FilledAutolinkOptions = {
-  url: {
-    requireSchemes: true,
-    schemes: ['http', 'https'],
-    attributes: {},
-  },
-};
-
 interface Matching {
-  transform: CustomTransform;
+  transform: CompiledTransform;
   pattern: RegExp;
   result: Array<string>;
   position: number;
