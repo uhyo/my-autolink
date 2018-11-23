@@ -1,3 +1,4 @@
 import { autolink } from './main';
-export { autolink };
+import { compile } from './compile';
+export { autolink, compile };
 export default autolink;

@@ -5,11 +5,6 @@ import {
 } from './interfaces';
 import { compile, CompiledTransform } from './compile';
 
-/**
- * Cache of regexp object.
- */
-const patternCache = new WeakMap<object, RegExp>();
-
 export function autolink(
   text: string,
   transforms: AutolinkTransforms,
